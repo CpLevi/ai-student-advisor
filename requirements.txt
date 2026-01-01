@@ -3,4 +3,4 @@ uvicorn
 openai
 scikit-learn
 jinja2
-python-dotenv
+pydantic
