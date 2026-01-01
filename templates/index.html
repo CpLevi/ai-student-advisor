@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <title>AI Student Advisor - Smart Career & Study Guidance</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta name="description" content="AI-powered student advisor for career guidance, study tips, and tech learning paths">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -33,14 +33,14 @@ body {
   justify-content: center;
   align-items: center;
   font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  padding: 30px 20px;
+  padding: 0;
   position: relative;
-  overflow: auto;
+  overflow: hidden;
 }
 
 body::before {
   content: '';
-  position: absolute;
+  position: fixed;
   width: 600px;
   height: 600px;
   background: radial-gradient(circle, rgba(192, 132, 252, 0.3) 0%, transparent 70%);
@@ -48,11 +48,12 @@ body::before {
   right: -200px;
   animation: float 20s ease-in-out infinite;
   pointer-events: none;
+  z-index: 0;
 }
 
 body::after {
   content: '';
-  position: absolute;
+  position: fixed;
   width: 500px;
   height: 500px;
   background: radial-gradient(circle, rgba(20, 184, 166, 0.25) 0%, transparent 70%);
@@ -60,6 +61,7 @@ body::after {
   left: -150px;
   animation: float 15s ease-in-out infinite reverse;
   pointer-events: none;
+  z-index: 0;
 }
 
 @keyframes float {
@@ -69,33 +71,45 @@ body::after {
 
 .chat-container {
   width: 100%;
-  max-width: 520px;
-  height: 85vh;
-  max-height: 800px;
+  height: 100vh;
   background: var(--glass-bg);
   backdrop-filter: blur(40px);
   -webkit-backdrop-filter: blur(40px);
-  border-radius: 32px;
-  border: 1px solid var(--glass-border);
-  box-shadow: 
-    0 8px 32px var(--shadow-color),
-    0 2px 8px rgba(20, 184, 166, 0.1),
-    inset 0 1px 0 rgba(255, 255, 255, 0.5);
   display: flex;
   flex-direction: column;
-  overflow: hidden;
   position: relative;
   z-index: 1;
-  margin: auto;
+  overflow: hidden;
+}
+
+/* Desktop styles */
+@media (min-width: 769px) {
+  body {
+    padding: 30px 20px;
+  }
+  
+  .chat-container {
+    max-width: 520px;
+    height: 85vh;
+    max-height: 800px;
+    border-radius: 32px;
+    border: 1px solid var(--glass-border);
+    box-shadow: 
+      0 8px 32px var(--shadow-color),
+      0 2px 8px rgba(20, 184, 166, 0.1),
+      inset 0 1px 0 rgba(255, 255, 255, 0.5);
+    margin: auto;
+  }
 }
 
 .header {
-  padding: 28px 24px 24px;
+  padding: 24px 20px 20px;
   background: linear-gradient(135deg, var(--lavender) 0%, var(--teal) 100%);
   color: white;
   text-align: center;
   position: relative;
   overflow: hidden;
+  flex-shrink: 0;
 }
 
 .header::before {
@@ -110,7 +124,7 @@ body::after {
 }
 
 .header h1 {
-  font-size: 24px;
+  font-size: 22px;
   font-weight: 800;
   letter-spacing: -0.8px;
   position: relative;
@@ -120,7 +134,7 @@ body::after {
 }
 
 .header p {
-  font-size: 14px;
+  font-size: 13px;
   opacity: 0.95;
   font-weight: 500;
   letter-spacing: 0.2px;
@@ -128,14 +142,16 @@ body::after {
 
 .messages {
   flex: 1;
-  padding: 24px 20px;
+  padding: 16px 12px;
   overflow-y: auto;
+  overflow-x: hidden;
   background: transparent;
   scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
 }
 
 .messages::-webkit-scrollbar {
-  width: 6px;
+  width: 4px;
 }
 
 .messages::-webkit-scrollbar-track {
@@ -145,12 +161,6 @@ body::after {
 .messages::-webkit-scrollbar-thumb {
   background: rgba(147, 51, 234, 0.3);
   border-radius: 10px;
-  opacity: 0;
-  transition: opacity 0.3s;
-}
-
-.messages:hover::-webkit-scrollbar-thumb {
-  opacity: 1;
 }
 
 .messages::-webkit-scrollbar-thumb:hover {
@@ -158,16 +168,17 @@ body::after {
 }
 
 .message {
-  max-width: 82%;
-  padding: 16px 20px;
-  border-radius: 20px;
-  margin-bottom: 16px;
-  line-height: 1.75;
-  font-size: 15px;
+  max-width: 85%;
+  padding: 14px 16px;
+  border-radius: 18px;
+  margin-bottom: 12px;
+  line-height: 1.6;
+  font-size: 14px;
   position: relative;
   animation: messagePop 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   transform-origin: bottom;
   word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 @keyframes messagePop {
@@ -200,7 +211,6 @@ body::after {
   border: 1px solid rgba(255, 255, 255, 0.6);
 }
 
-/* Enhanced formatting inside bot messages */
 .bot strong {
   color: var(--lavender-deep);
   font-weight: 800;
@@ -208,16 +218,16 @@ body::after {
 }
 
 .bot ul {
-  margin: 12px 0;
+  margin: 10px 0;
   padding-left: 0;
   list-style: none;
 }
 
 .bot li {
-  margin: 8px 0;
-  padding-left: 24px;
+  margin: 6px 0;
+  padding-left: 20px;
   position: relative;
-  line-height: 1.7;
+  line-height: 1.6;
 }
 
 .bot li::before {
@@ -226,13 +236,13 @@ body::after {
   left: 0;
   color: var(--teal);
   font-weight: bold;
-  font-size: 20px;
-  line-height: 1.7;
+  font-size: 18px;
+  line-height: 1.6;
 }
 
 .bot p {
-  margin: 10px 0;
-  line-height: 1.75;
+  margin: 8px 0;
+  line-height: 1.6;
 }
 
 .bot.revealing span {
@@ -258,20 +268,20 @@ body::after {
   display: flex;
   align-items: center;
   gap: 7px;
-  padding: 16px 20px;
+  padding: 14px 16px;
   background: rgba(255, 255, 255, 0.90);
   backdrop-filter: blur(20px);
-  border-radius: 20px;
+  border-radius: 18px;
   border-bottom-left-radius: 6px;
   max-width: fit-content;
-  margin-bottom: 16px;
+  margin-bottom: 12px;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
   animation: messagePop 0.3s ease;
 }
 
 .typing-dot {
-  width: 9px;
-  height: 9px;
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
   background: linear-gradient(135deg, var(--teal) 0%, var(--lavender) 100%);
   animation: thermalGlow 1.3s ease-in-out infinite;
@@ -295,25 +305,27 @@ body::after {
 }
 
 .quick-actions {
-  padding: 16px 20px 14px;
+  padding: 12px 12px 10px;
   overflow-x: auto;
   display: flex;
-  gap: 10px;
+  gap: 8px;
   background: transparent;
   -ms-overflow-style: none;
   scrollbar-width: none;
   scroll-behavior: smooth;
+  flex-shrink: 0;
+  -webkit-overflow-scrolling: touch;
 }
 
 .quick-actions::-webkit-scrollbar { display: none; }
 
 .action-chip {
-  padding: 11px 20px;
+  padding: 10px 16px;
   background: rgba(255, 255, 255, 0.75);
   backdrop-filter: blur(20px);
   border: 1px solid rgba(147, 51, 234, 0.2);
-  border-radius: 22px;
-  font-size: 13.5px;
+  border-radius: 20px;
+  font-size: 12.5px;
   font-weight: 700;
   color: var(--lavender-deep);
   cursor: pointer;
@@ -321,33 +333,32 @@ body::after {
   transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   box-shadow: 0 2px 10px rgba(147, 51, 234, 0.12);
   letter-spacing: 0.2px;
-}
-
-.action-chip:hover {
-  background: linear-gradient(135deg, var(--lavender) 0%, var(--teal) 100%);
-  color: white;
-  transform: translateY(-3px);
-  box-shadow: 0 8px 24px rgba(147, 51, 234, 0.35);
-  border-color: transparent;
+  flex-shrink: 0;
 }
 
 .action-chip:active {
-  transform: translateY(-1px);
+  background: linear-gradient(135deg, var(--lavender) 0%, var(--teal) 100%);
+  color: white;
+  transform: scale(0.95);
+  border-color: transparent;
 }
 
 .input-container {
-  padding: 20px;
+  padding: 12px;
   background: transparent;
+  flex-shrink: 0;
+  /* Add safe area padding for iOS notch */
+  padding-bottom: max(12px, env(safe-area-inset-bottom));
 }
 
 .input-wrapper {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 8px;
   background: rgba(255, 255, 255, 0.88);
   backdrop-filter: blur(30px);
-  border-radius: 26px;
-  padding: 8px 8px 8px 22px;
+  border-radius: 24px;
+  padding: 6px 6px 6px 16px;
   border: 2px solid transparent;
   transition: all 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.1);
   box-shadow: 
@@ -361,20 +372,20 @@ body::after {
     0 10px 40px rgba(147, 51, 234, 0.3),
     0 0 0 4px rgba(147, 51, 234, 0.12),
     inset 0 1px 0 rgba(255, 255, 255, 0.9);
-  transform: translateY(-3px);
   background: rgba(255, 255, 255, 0.95);
 }
 
 .input-wrapper input {
   flex: 1;
-  padding: 14px 0;
+  padding: 12px 0;
   border: none;
   outline: none;
-  font-size: 15.5px;
+  font-size: 14px;
   background: transparent;
   color: #1f2937;
   font-family: inherit;
   font-weight: 500;
+  min-width: 0;
 }
 
 .input-wrapper input::placeholder {
@@ -383,19 +394,21 @@ body::after {
 }
 
 .send-button {
-  padding: 14px 28px;
-  border-radius: 20px;
+  padding: 12px 20px;
+  border-radius: 18px;
   border: none;
   background: linear-gradient(135deg, var(--lavender-deep) 0%, var(--teal) 100%);
   color: white;
   cursor: pointer;
   font-weight: 800;
-  font-size: 14.5px;
+  font-size: 13px;
   letter-spacing: 0.4px;
   transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   box-shadow: 0 4px 18px rgba(147, 51, 234, 0.35);
   position: relative;
   overflow: hidden;
+  flex-shrink: 0;
+  white-space: nowrap;
 }
 
 .send-button::before {
@@ -409,17 +422,8 @@ body::after {
   transition: left 0.6s;
 }
 
-.send-button:hover {
-  transform: translateY(-2px) scale(1.02);
-  box-shadow: 0 10px 30px rgba(147, 51, 234, 0.45);
-}
-
-.send-button:hover::before {
-  left: 100%;
-}
-
 .send-button:active {
-  transform: translateY(0) scale(0.98);
+  transform: scale(0.95);
 }
 
 .send-button:disabled {
@@ -428,21 +432,153 @@ body::after {
   transform: none;
 }
 
-@media (max-width: 600px) {
-  .chat-container {
-    height: 100vh;
-    max-height: none;
-    border-radius: 0;
-    max-width: 100%;
+/* Desktop hover effects */
+@media (hover: hover) {
+  .action-chip:hover {
+    background: linear-gradient(135deg, var(--lavender) 0%, var(--teal) 100%);
+    color: white;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px rgba(147, 51, 234, 0.35);
+    border-color: transparent;
+  }
+  
+  .send-button:hover {
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 10px 30px rgba(147, 51, 234, 0.45);
+  }
+  
+  .send-button:hover::before {
+    left: 100%;
+  }
+  
+  .input-wrapper:not(.focused):hover {
+    transform: translateY(-2px);
+  }
+}
+
+/* Tablet adjustments */
+@media (min-width: 481px) and (max-width: 768px) {
+  .header h1 {
+    font-size: 20px;
+  }
+  
+  .header p {
+    font-size: 12px;
+  }
+  
+  .message {
+    font-size: 13.5px;
+  }
+}
+
+/* Mobile specific adjustments */
+@media (max-width: 480px) {
+  .header {
+    padding: 20px 16px 16px;
+  }
+  
+  .header h1 {
+    font-size: 19px;
+    margin-bottom: 4px;
+  }
+  
+  .header p {
+    font-size: 12px;
+  }
+  
+  .messages {
+    padding: 12px 10px;
   }
   
   .message {
     max-width: 88%;
-    font-size: 14.5px;
+    font-size: 13.5px;
+    padding: 12px 14px;
+  }
+  
+  .quick-actions {
+    padding: 10px 10px 8px;
+  }
+  
+  .action-chip {
+    font-size: 12px;
+    padding: 9px 14px;
+  }
+  
+  .input-container {
+    padding: 10px;
+    padding-bottom: max(10px, env(safe-area-inset-bottom));
+  }
+  
+  .input-wrapper {
+    padding: 5px 5px 5px 14px;
+  }
+  
+  .input-wrapper input {
+    font-size: 13.5px;
+    padding: 11px 0;
+  }
+  
+  .send-button {
+    padding: 11px 18px;
+    font-size: 12.5px;
+  }
+}
+
+/* Very small mobile devices */
+@media (max-width: 360px) {
+  .header h1 {
+    font-size: 17px;
+  }
+  
+  .header p {
+    font-size: 11px;
+  }
+  
+  .message {
+    font-size: 13px;
+  }
+  
+  .action-chip {
+    font-size: 11.5px;
+    padding: 8px 12px;
+  }
+  
+  .send-button {
+    padding: 10px 16px;
+  }
+}
+
+/* Landscape mobile orientation */
+@media (max-height: 500px) and (orientation: landscape) {
+  .header {
+    padding: 12px 16px;
   }
   
   .header h1 {
-    font-size: 21px;
+    font-size: 16px;
+    margin-bottom: 2px;
+  }
+  
+  .header p {
+    font-size: 11px;
+  }
+  
+  .messages {
+    padding: 8px 10px;
+  }
+  
+  .message {
+    padding: 10px 12px;
+    margin-bottom: 8px;
+  }
+  
+  .quick-actions {
+    padding: 6px 10px;
+  }
+  
+  .input-container {
+    padding: 8px;
   }
 }
 </style>
@@ -473,7 +609,7 @@ body::after {
     <div class="input-wrapper" id="inputWrapper">
       <input 
         id="userInput" 
-        placeholder="Ask about careers, studies, AI, or anything..." 
+        placeholder="Ask about careers, studies, AI..." 
         onkeypress="handleKeyPress(event)"
         maxlength="1000"
       />
@@ -490,7 +626,6 @@ const inputEl = document.getElementById("userInput");
 const inputWrapper = document.getElementById("inputWrapper");
 const sendBtn = document.getElementById("sendBtn");
 
-// Generate unique session ID
 const sessionId = 'user_' + Math.random().toString(36).substr(2, 9) + '_' + Date.now();
 
 inputEl.addEventListener('focus', () => inputWrapper.classList.add('focused'));
@@ -510,26 +645,16 @@ function quickAction(message) {
 }
 
 function formatMarkdown(text) {
-  // Convert **bold** to <strong>
   text = text.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
-  
-  // Convert bullet points (•, -, *) to list items
   text = text.replace(/^[•\-\*]\s+(.+)$/gm, '<li>$1</li>');
-  
-  // Wrap consecutive <li> in <ul>
   text = text.replace(/(<li>.*?<\/li>\n?)+/g, (match) => `<ul>${match}</ul>`);
-  
-  // Convert double line breaks to paragraph breaks
   text = text.replace(/\n\n+/g, '</p><p>');
   
-  // Wrap in paragraph if not already
   if (!text.startsWith('<')) {
     text = '<p>' + text + '</p>';
   }
   
-  // Convert remaining single line breaks to <br>
   text = text.replace(/\n/g, '<br>');
-  
   return text;
 }
 
@@ -585,7 +710,6 @@ async function sendMessage() {
     
     const formattedResponse = formatMarkdown(data.response);
     
-    // Word reveal animation
     const tempDiv = document.createElement('div');
     tempDiv.innerHTML = formattedResponse;
     const textContent = tempDiv.textContent || tempDiv.innerText;
@@ -598,7 +722,6 @@ async function sendMessage() {
       botMsg.appendChild(span);
     });
     
-    // Replace with formatted HTML after animation
     setTimeout(() => {
       botMsg.classList.remove('revealing');
       botMsg.innerHTML = formattedResponse;
@@ -621,7 +744,6 @@ async function sendMessage() {
   inputEl.focus();
 }
 
-// Auto-scroll quick actions on load
 document.addEventListener('DOMContentLoaded', () => {
   inputEl.focus();
 });
